@@ -1,0 +1,12 @@
+
+###
+GET http://localhost:8082/connections
+
+###
+GET http://localhost:8082/profiles/96/connections
+
+###
+POST http://localhost:8082/profiles/96/connections?otherUserId=98
+
+###
+DELETE http://localhost:8082/profiles/96/connections?otherUserId=95

@@ -1,0 +1,101 @@
+version: '3.1'
+name: linkedin
+services:
+  db-user:
+    container_name: mariadb-user
+    image: mariadb:10.11
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: linkedin_user
+    volumes:
+      - data-mariadb-user:/var/lib/mysql
+    networks:
+      - spring-cloud-network
+
+  db-profile:
+    container_name: mariadb-profile
+    image: mariadb:10.11
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: linkedin_profile
+    volumes:
+     - data-mariadb-profile:/var/lib/mysql   
+    networks:
+      - spring-cloud-network
+  
+  db-post:
+    container_name: mariadb-post
+    image: mariadb:10.11
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: linkedin_post
+    volumes:
+      - data-mariadb-post:/var/lib/mysql
+    networks:
+      - spring-cloud-network
+
+  linkedin-user:
+    container_name: linkedin-user
+    restart: always
+    build:
+      context: ../linkedin-user
+      dockerfile: Dockerfile
+    networks:
+      - spring-cloud-network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db-user:3306/linkedin_user
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    
+
+  linkedin-profile:
+    container_name: linkedin-profile
+    restart: always
+    build:
+      context: ../linkedin-profile
+      dockerfile: Dockerfile
+    networks:
+      - spring-cloud-network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db-profile:3306/linkedin_profile
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+  
+  linkedin-post:
+    container_name: linkedin-post
+    restart: always
+    build:
+      context: ../linkedin-post
+      dockerfile: Dockerfile
+    networks:
+      - spring-cloud-network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db-post:3306/linkedin_post
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+
+  linkedin-bff:
+    container_name: linkedin-bff
+    restart: always
+    build:
+      context: ../linkedin-bff
+      dockerfile: Dockerfile
+    networks:
+      - spring-cloud-network
+    environment:
+      LINKEDIN_USER_HOST: linkedin-user
+      LINKEDIN_PROFILE_HOST: linkedin-profile
+      LINKEDIN_POST_HOST: linkedin-post
+    ports:
+      - "8080:8080"
+
+networks:
+  spring-cloud-network:
+    driver: bridge
+volumes:
+  data-mariadb-user:
+  data-mariadb-profile:
+  data-mariadb-post:

@@ -1,0 +1,33 @@
+
+###
+#get profile by his userid
+GET http://localhost:8080/api/profiles/92
+
+###
+#edit profile for the user
+PUT http://localhost:8080/api/profiles/94
+Content-Type: application/json
+
+{
+  "currentJobTitle": "test",
+  "industry": "IT",
+  "summary": "test",
+  "headline": "test",
+  "website": "http://mysite.com",
+  "openForWork": 1
+}
+
+###
+#create profile for the user
+POST http://localhost:8080/api/profiles
+Content-Type: application/json
+
+{
+  "userId": 111,
+  "currentJobTitle": "test1",
+  "industry": "IT",
+  "summary": "test1",
+  "headline": "test1",
+  "website": "http://mysite.com",
+  "openForWork": 0
+}
